@@ -24,7 +24,7 @@ This project provides a **robust and efficient solution** using a **brute force 
 
 ```
 ├── count_assignments.py          # Main solution implementation
-├── count_assignments_solution.py # Comprehensive test suite
+├── picasso_tower_solver.py       # Comprehensive test suite
 ├── README.md                     # This documentation
 └── LICENSE                       # MIT License
 ```
@@ -38,11 +38,19 @@ This project provides a **robust and efficient solution** using a **brute force 
 - **Constraint validation** - Ensures all hints are satisfied
 - **Efficient counting** - Fast enumeration of valid assignments
 
+### **Advanced Features**
+- **TowerState class** - Manages tower state and assignments
+- **AssignmentValidator** - Validates assignments against hints
+- **PerformanceTimer** - Measures execution time
+- **TestResult** - Structured test results with metadata
+- **Optimized version** - Alternative implementation with early termination
+
 ### **Test Coverage**
 - ✅ **Assignment examples** - All provided examples pass
 - ✅ **Edge cases** - Empty hints, contradicting hints, etc.
 - ✅ **Performance testing** - Execution time monitoring
 - ✅ **Comprehensive validation** - All hint types tested
+- ✅ **Class functionality** - TowerState and AssignmentValidator tests
 
 ## 📊 Performance
 
@@ -65,7 +73,7 @@ This project provides a **robust and efficient solution** using a **brute force 
 
 ### **Running Tests**
 ```bash
-python3 count_assignments_solution.py
+python3 picasso_tower_solver.py
 ```
 
 ### **Using the Solution**
@@ -84,6 +92,19 @@ hints = [
 
 result = count_assignments(hints)
 print(f"Valid assignments: {result}")  # Output: 2
+```
+
+### **Using Advanced Features**
+```python
+from count_assignments import TowerState, AssignmentValidator, FloorAssignment
+
+# Create tower state
+tower = TowerState()
+assignment = FloorAssignment(Floor.First, Animal.Rabbit, Color.Red)
+tower.add_assignment(assignment)
+
+# Validate assignments
+is_valid = AssignmentValidator.validate_all_hints(assignments, hints)
 ```
 
 ## 📈 Algorithm
@@ -130,10 +151,16 @@ print(f"Valid assignments: {result}")  # Output: 2
 - ✅ **Redundant hints**: 2880 assignments
 - ✅ **Complete assignment**: 1 assignment
 
+### **Advanced Features**
+- ✅ **TowerState class**: All tests pass
+- ✅ **AssignmentValidator**: All tests pass
+- ✅ **PerformanceTimer**: Working correctly
+- ✅ **Optimized version**: Matches original results
+
 ## 🚀 Getting Started
 
 1. **Clone the repository**
-2. **Run tests**: `python3 count_assignments_solution.py`
+2. **Run tests**: `python3 picasso_tower_solver.py`
 3. **Use the solution**: Import and use `count_assignments()` function
 
 ## 📄 License
