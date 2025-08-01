@@ -7,8 +7,6 @@ counting functionality, with improved performance and readability.
 
 import math
 import time
-from typing import List, Tuple
-
 from count_assignments import (
     AbsoluteHint, Animal, Color, Floor, FloorAssignment,
     NeighborHint, RelativeHint, count_assignments
@@ -17,16 +15,16 @@ from count_assignments import (
 
 class PerformanceTimer:
     """Context manager for measuring execution time."""
-    
+
     def __init__(self, test_name: str):
         self.test_name = test_name
         self.start_time = None
         self.end_time = None
-    
+
     def __enter__(self):
         self.start_time = time.time()
         return self
-    
+
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.end_time = time.time()
         duration = self.end_time - self.start_time
@@ -36,7 +34,7 @@ class PerformanceTimer:
 def test_absolute_hints():
     """Test absolute hint validation with improved readability."""
     print("🧪 Testing absolute hints...")
-    
+
     # Test cases with clear descriptions
     test_cases = [
         # (hint, assignments, expected_result, description)
@@ -71,7 +69,7 @@ def test_absolute_hints():
             "Bird on wrong floor - should not be satisfied"
         )
     ]
-    
+
     for hint, assignments, expected, description in test_cases:
         result = hint.check_if_satisfied(assignments)
         assert result == expected, f"Failed: {description}"
@@ -81,14 +79,14 @@ def test_absolute_hints():
 def test_count_assignments_basic():
     """Test basic assignment counting scenarios."""
     print("🧪 Testing basic assignment counting...")
-    
+
     with PerformanceTimer("Empty hints test"):
         # No hints should return all possible assignments
         total_assignments = count_assignments([])
         expected_total = math.factorial(5) * math.factorial(5)  # 5! * 5! = 14400
         assert total_assignments == expected_total
         print(f"✅ Empty hints: {total_assignments} assignments")
-    
+
     with PerformanceTimer("Single absolute hint test"):
         # Single absolute hint
         one_hint = [AbsoluteHint(Animal.Rabbit, Floor.First)]
@@ -96,7 +94,7 @@ def test_count_assignments_basic():
         expected = math.factorial(5) * math.factorial(4)  # 5! * 4! = 2880
         assert result == expected
         print(f"✅ Single hint: {result} assignments")
-    
+
     with PerformanceTimer("Contradicting hints test"):
         # Contradicting hints should return 0
         contradicting_hints = [
@@ -111,7 +109,7 @@ def test_count_assignments_basic():
 def test_assignment_examples():
     """Test the specific examples from the assignment with performance tracking."""
     print("🧪 Testing assignment examples...")
-    
+
     # Example 1 from assignment
     hints_example_1 = [
         AbsoluteHint(Animal.Rabbit, Floor.First),
@@ -121,12 +119,12 @@ def test_assignment_examples():
         AbsoluteHint(Animal.Grasshopper, Color.Orange),
         NeighborHint(Color.Yellow, Color.Green),
     ]
-    
+
     with PerformanceTimer("Example 1"):
         result = count_assignments(hints_example_1)
         assert result == 2
         print(f"✅ Example 1: {result} assignments")
-    
+
     # Example 2 from assignment
     hints_example_2 = [
         AbsoluteHint(Animal.Bird, Floor.Fifth),
@@ -136,17 +134,17 @@ def test_assignment_examples():
         NeighborHint(Color.Red, Color.Orange),
         RelativeHint(Animal.Chicken, Color.Blue, -4)
     ]
-    
+
     with PerformanceTimer("Example 2"):
         result = count_assignments(hints_example_2)
         assert result == 4
         print(f"✅ Example 2: {result} assignments")
-    
+
     # Example 3 from assignment
     hints_example_3 = [
         RelativeHint(Animal.Rabbit, Color.Green, -2)
     ]
-    
+
     with PerformanceTimer("Example 3"):
         result = count_assignments(hints_example_3)
         assert result == 1728
@@ -156,21 +154,21 @@ def test_assignment_examples():
 def test_hint_types():
     """Test different hint types with clear organization."""
     print("🧪 Testing different hint types...")
-    
+
     # Relative hints
     with PerformanceTimer("Relative hints test"):
         single_relative_hint = [RelativeHint(Animal.Rabbit, Color.Green, -2)]
         result = count_assignments(single_relative_hint)
         assert result == 1728
         print(f"✅ Relative hint: {result} assignments")
-    
+
     # Neighbor hints
     with PerformanceTimer("Neighbor hints test"):
         single_neighbor_hint = [NeighborHint(Animal.Rabbit, Color.Green)]
         result = count_assignments(single_neighbor_hint)
         assert result == 4608
         print(f"✅ Neighbor hint: {result} assignments")
-    
+
     # Mixed hints
     with PerformanceTimer("Mixed hints test"):
         mixed_hints = [
@@ -185,7 +183,7 @@ def test_hint_types():
 def test_edge_cases():
     """Test edge cases and boundary conditions."""
     print("🧪 Testing edge cases...")
-    
+
     # Redundant hints
     with PerformanceTimer("Redundant hints test"):
         redundant_hints = [
@@ -196,7 +194,7 @@ def test_edge_cases():
         expected = math.factorial(5) * math.factorial(4)
         assert result == expected
         print(f"✅ Redundant hints: {result} assignments")
-    
+
     # Duplicated hints
     with PerformanceTimer("Duplicated hints test"):
         duplicated_hints = [
@@ -207,7 +205,7 @@ def test_edge_cases():
         expected = math.factorial(5) * math.factorial(4)
         assert result == expected
         print(f"✅ Duplicated hints: {result} assignments")
-    
+
     # Complete assignment
     with PerformanceTimer("Complete assignment test"):
         complete_hints = [
@@ -230,13 +228,13 @@ def test_edge_cases():
 def test_performance_benchmark():
     """Benchmark performance with different hint complexities."""
     print("🧪 Performance benchmarking...")
-    
+
     # Simple case
     simple_hints = [AbsoluteHint(Animal.Rabbit, Floor.First)]
     with PerformanceTimer("Simple case (1 hint)"):
         result = count_assignments(simple_hints)
         print(f"   Result: {result} assignments")
-    
+
     # Medium case
     medium_hints = [
         AbsoluteHint(Animal.Rabbit, Floor.First),
@@ -247,7 +245,7 @@ def test_performance_benchmark():
     with PerformanceTimer("Medium case (4 hints)"):
         result = count_assignments(medium_hints)
         print(f"   Result: {result} assignments")
-    
+
     # Complex case
     complex_hints = [
         AbsoluteHint(Animal.Rabbit, Floor.First),
@@ -266,9 +264,9 @@ def run_all_tests():
     """Run all optimized tests with performance tracking."""
     print("🚀 Running optimized test suite...")
     print("=" * 60)
-    
+
     start_time = time.time()
-    
+
     try:
         test_absolute_hints()
         test_count_assignments_basic()
@@ -276,27 +274,27 @@ def run_all_tests():
         test_hint_types()
         test_edge_cases()
         test_performance_benchmark()
-        
+
         total_time = time.time() - start_time
         print("\n" + "=" * 60)
-        print(f"🎉 All tests passed successfully!")
+        print("🎉 All tests passed successfully!")
         print(f"⏱️  Total execution time: {total_time:.4f} seconds")
-        print(f"✅ Test coverage: 100%")
-        
+        print("✅ Test coverage: 100%")
+
     except AssertionError as e:
         print(f"\n❌ Test failed: {e}")
         return False
     except Exception as e:
         print(f"\n❌ Unexpected error: {e}")
         return False
-    
+
     return True
 
 
 def compare_with_original():
     """Compare performance with the original solution."""
     print("\n🔍 Performance comparison with original solution...")
-    
+
     # Test cases for comparison
     test_cases = [
         ("Empty hints", []),
@@ -319,10 +317,10 @@ def compare_with_original():
         ]),
         ("Example 3", [RelativeHint(Animal.Rabbit, Color.Green, -2)])
     ]
-    
+
     print(f"{'Test Case':<15} {'Result':<10} {'Time (s)':<10}")
     print("-" * 40)
-    
+
     for name, hints in test_cases:
         start_time = time.time()
         result = count_assignments(hints)
@@ -333,9 +331,9 @@ def compare_with_original():
 if __name__ == '__main__':
     # Run optimized tests
     success = run_all_tests()
-    
+
     if success:
         # Show performance comparison
         compare_with_original()
-    
-    exit(0 if success else 1) 
+
+    exit(0 if success else 1)

@@ -39,7 +39,7 @@ class FloorAssignment:
         self.floor = floor
         self.animal = animal
         self.color = color
-    
+
     def __repr__(self):
         return f"FloorAssignment(floor={self.floor}, animal={self.animal}, color={self.color})"
 
@@ -62,7 +62,7 @@ class AbsoluteHint(Hint):
     def __init__(self, attr1, attr2):
         self._attr1 = attr1
         self._attr2 = attr2
-    
+
     def check_if_satisfied(self, assignments):
         """Check if this hint is satisfied by the given assignments"""
         for assignment in assignments:
@@ -70,7 +70,7 @@ class AbsoluteHint(Hint):
             if self._check_attr_match(assignment, self._attr1) and self._check_attr_match(assignment, self._attr2):
                 return True
         return False
-    
+
     def _check_attr_match(self, assignment, attr):
         """Check if an assignment matches a given attribute"""
         if isinstance(attr, Floor):
@@ -80,11 +80,11 @@ class AbsoluteHint(Hint):
         elif isinstance(attr, Animal):
             return assignment.animal == attr
         return False
-    
+
     def get_possible_floor_assignments(self, empty_floors, all_animal_options, all_color_options, floor_assignments):
         """Get possible floor assignments that satisfy this hint"""
         possible_assignments = []
-        
+
         # Check if this hint can be satisfied with the given constraints
         for floor in empty_floors:
             for animal in all_animal_options:
@@ -92,7 +92,7 @@ class AbsoluteHint(Hint):
                     assignment = FloorAssignment(floor, animal, color)
                     if self._check_attr_match(assignment, self._attr1) and self._check_attr_match(assignment, self._attr2):
                         possible_assignments.append(assignment)
-        
+
         return possible_assignments
 
 
@@ -112,22 +112,22 @@ class RelativeHint(Hint):
         self._attr1 = attr1
         self._attr2 = attr2
         self._difference = difference
-    
+
     def check_if_satisfied(self, assignments):
         """Check if this hint is satisfied by the given assignments"""
         if len(assignments) < 2:
             return True  # Can't check relative hints with less than 2 assignments
-        
+
         # Find assignments that match our attributes
         attr1_assignments = [a for a in assignments if self._check_attr_match(a, self._attr1)]
         attr2_assignments = [a for a in assignments if self._check_attr_match(a, self._attr2)]
-        
+
         for a1 in attr1_assignments:
             for a2 in attr2_assignments:
                 if a1.floor.value - a2.floor.value == self._difference:
                     return True
         return False
-    
+
     def _check_attr_match(self, assignment, attr):
         """Check if an assignment matches a given attribute"""
         if isinstance(attr, Floor):
@@ -154,22 +154,22 @@ class NeighborHint(Hint):
     def __init__(self, attr1, attr2):
         self._attr1 = attr1
         self._attr2 = attr2
-    
+
     def check_if_satisfied(self, assignments):
         """Check if this hint is satisfied by the given assignments"""
         if len(assignments) < 2:
             return True  # Can't check neighbor hints with less than 2 assignments
-        
+
         # Find assignments that match our attributes
         attr1_assignments = [a for a in assignments if self._check_attr_match(a, self._attr1)]
         attr2_assignments = [a for a in assignments if self._check_attr_match(a, self._attr2)]
-        
+
         for a1 in attr1_assignments:
             for a2 in attr2_assignments:
                 if abs(a1.floor.value - a2.floor.value) == 1:
                     return True
         return False
-    
+
     def _check_attr_match(self, assignment, attr):
         """Check if an assignment matches a given attribute"""
         if isinstance(attr, Floor):
@@ -189,14 +189,14 @@ def count_assignments(hints):
     if not hints:
         # No hints means all possible assignments are valid
         return math.factorial(5) * math.factorial(5)  # 5! * 5! = 14400
-    
+
     # Generate all possible assignments
     floors = list(Floor)
     animals = list(Animal)
     colors = list(Color)
-    
+
     valid_count = 0
-    
+
     # Generate all permutations of animals and colors
     for animal_perm in permutations(animals):
         for color_perm in permutations(colors):
@@ -204,11 +204,11 @@ def count_assignments(hints):
             assignment = []
             for i, floor in enumerate(floors):
                 assignment.append(FloorAssignment(floor, animal_perm[i], color_perm[i]))
-            
+
             # Check if this assignment satisfies all hints
             if all(hint.check_if_satisfied(assignment) for hint in hints):
                 valid_count += 1
-    
+
     return valid_count
 
 
@@ -243,4 +243,4 @@ def test():
 
 
 if __name__ == '__main__':
-    test() 
+    test()
