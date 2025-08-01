@@ -9,44 +9,14 @@ import time
 import math
 from typing import List, Dict, Any
 from count_assignments import (
-    count_assignments, count_assignments_optimized,
+    count_assignments,
     AbsoluteHint, RelativeHint, NeighborHint,
-    Animal, Color, Floor, FloorAssignment,
-    TowerState, AssignmentValidator
+    Animal, Color, Floor, FloorAssignment
 )
-
-
-class PerformanceTimer:
-    """Context manager for measuring execution time"""
-    
-    def __init__(self, test_name: str):
-        self.test_name = test_name
-        self.start_time = None
-        self.end_time = None
-    
-    def __enter__(self):
-        self.start_time = time.time()
-        return self
-    
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.end_time = time.time()
-        duration = self.end_time - self.start_time
-        print(f"⏱️  {self.test_name}: {duration:.4f}s")
-
-
-class TestResult:
-    """Represents a test result with metadata"""
-    
-    def __init__(self, name: str, expected: int, actual: int, time_taken: float):
-        self.name = name
-        self.expected = expected
-        self.actual = actual
-        self.time_taken = time_taken
-        self.passed = expected == actual
-    
-    def __str__(self):
-        status = "✅ PASS" if self.passed else "❌ FAIL"
-        return f"{status} | {self.name}: Expected {self.expected}, Got {self.actual} ({self.time_taken:.4f}s)"
+from picasso_tower_enhanced import (
+    TowerState, AssignmentValidator, PerformanceTimer, TestResult,
+    count_assignments_optimized
+)
 
 
 def test_assignment_examples() -> List[TestResult]:
@@ -116,10 +86,8 @@ def test_edge_cases() -> List[TestResult]:
     single_hint = [AbsoluteHint(Animal.Rabbit, Floor.First)]
     with PerformanceTimer("Single absolute hint"):
         result_single = count_assignments(single_hint)
-    # When Rabbit is fixed on Floor 1, we have 4! * 4! remaining combinations
-    # for the other 4 animals and 4 colors (since Rabbit can be any color)
-    expected_single = math.factorial(4) * math.factorial(4)  # 576
-    # But actually, since Rabbit can be any color, it's 4! * 5! = 2880
+    # When Rabbit is fixed on Floor 1, we have 4! * 5! remaining combinations
+    # for the other 4 animals and 5 colors (since Rabbit can be any color)
     expected_single = math.factorial(4) * math.factorial(5)  # 2880
     results.append(TestResult("Single absolute hint", expected_single, result_single, 0.0))
     
@@ -313,7 +281,7 @@ def run_performance_benchmark() -> Dict[str, Any]:
     # Test with different hint complexities
     test_cases = [
         ("Empty", [], math.factorial(5) * math.factorial(5)),
-        ("Single", [AbsoluteHint(Animal.Rabbit, Floor.First)], math.factorial(4) * math.factorial(4)),
+        ("Single", [AbsoluteHint(Animal.Rabbit, Floor.First)], math.factorial(4) * math.factorial(5)),
         ("Example 1", [
             AbsoluteHint(Animal.Rabbit, Floor.First),
             AbsoluteHint(Animal.Chicken, Floor.Second),
